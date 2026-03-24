@@ -1,3 +1,4 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cracky_app/core/utils/router_observer.dart';
@@ -32,6 +33,11 @@ class MainApp extends StatelessWidget {
           switch (settings.name) {
             case "/home":
               return MaterialPageRoute(builder: (_) => HomePage());
+            case "/camera":
+              final cameras = settings.arguments as List<CameraDescription>;
+              return MaterialPageRoute(
+                builder: (_) => CameraPage(cameras: cameras),
+              );
             default:
               return MaterialPageRoute(
                 builder: (_) {
