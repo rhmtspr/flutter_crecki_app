@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cracky_app/presentation/bloc/camera_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter_cracky_app/presentation/pages/camera_page.dart';
 
 class HomePage extends StatelessWidget {
   static const routeName = "/home";
@@ -57,10 +58,6 @@ class HomePage extends StatelessWidget {
                     ),
                   ],
                 ),
-                if (state.isInitialized && state.controller != null) ...[
-                  const SizedBox(height: 24),
-                  _buildCameraPreview(context, state),
-                ],
               ],
             ),
           );
@@ -88,38 +85,6 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildCameraPreview(BuildContext context, CameraState state) {
-    return Column(
-      children: [
-        AspectRatio(
-          aspectRatio: state.controller!.value.aspectRatio,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(14),
-            child: CameraPreview(state.controller!),
-          ),
-        ),
-        const SizedBox(height: 12),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            IconButton.filled(
-              onPressed: () => context.read<CameraBloc>().add(CameraCapture()),
-              icon: const Icon(Icons.camera),
-            ),
-            IconButton.filledTonal(
-              onPressed: () => context.read<CameraBloc>().add(CameraSwitch()),
-              icon: const Icon(Icons.flip_camera_ios),
-            ),
-            IconButton.outlined(
-              onPressed: () => context.read<CameraBloc>().add(CameraStopped()),
-              icon: const Icon(Icons.close),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
   Future<void> _onGalleryView(BuildContext context) async {
     if (kIsWeb ||
         defaultTargetPlatform == TargetPlatform.macOS ||
@@ -144,7 +109,7 @@ class HomePage extends StatelessWidget {
       // Initialize the physical cameras
       final cameras = await availableCameras();
       if (context.mounted) {
-        context.read<CameraBloc>().add(CameraInitialize(cameras));
+        Navigator.pushNamed(context, CameraPage.routeName, arguments: cameras);
       }
     } else {
       // Fallback for Desktop/Web using ImagePicker
