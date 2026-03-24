@@ -5,9 +5,10 @@ import 'package:flutter_cracky_app/core/utils/app_error_handler.dart';
 import 'package:flutter_cracky_app/presentation/bloc/camera_bloc.dart';
 
 class CameraPage extends StatefulWidget {
-  static final routeName = "/camera";
+  static const routeName = "/camera";
+  final List<CameraDescription> cameras;
 
-  const CameraPage({super.key});
+  const CameraPage({super.key, required this.cameras});
 
   @override
   State<CameraPage> createState() => _CameraPageState();
@@ -53,7 +54,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
           );
         }
         if (state.imageFile != null) {
-          widget.onPictureTaken(state.imageFile!);
+          Navigator.pop(context);
         }
       },
       builder: (context, state) {
