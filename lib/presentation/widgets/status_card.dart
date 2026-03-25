@@ -9,8 +9,6 @@ class StatusCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final color = _getStatusColor(status);
 
-    print("Color is: $color");
-
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
