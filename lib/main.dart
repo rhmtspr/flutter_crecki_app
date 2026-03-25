@@ -7,11 +7,12 @@ import 'package:flutter_cracky_app/presentation/bloc/camera_bloc.dart';
 import 'package:flutter_cracky_app/presentation/bloc/crack_bloc.dart';
 import 'package:flutter_cracky_app/presentation/pages/camera_page.dart';
 import 'package:flutter_cracky_app/presentation/pages/home_page.dart';
+import 'package:flutter_cracky_app/presentation/pages/result_page.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  initInjection();
+  await initInjection();
   runApp(MainApp());
 }
 
@@ -37,6 +38,11 @@ class MainApp extends StatelessWidget {
               final cameras = settings.arguments as List<CameraDescription>;
               return MaterialPageRoute(
                 builder: (_) => CameraPage(cameras: cameras),
+              );
+            case "/result":
+              return MaterialPageRoute(
+                builder: (_) => ResultPage(),
+                settings: settings,
               );
             default:
               return MaterialPageRoute(
