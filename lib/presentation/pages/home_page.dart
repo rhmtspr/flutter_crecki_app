@@ -41,12 +41,7 @@ class HomePage extends StatelessWidget {
                 Navigator.pushNamed(
                   context,
                   "/result",
-                  arguments: {
-                    "label": state.result.label,
-                    "confidence": state.result.confidence,
-                    "status": state.result.status,
-                    "recommendation": state.result.recommendation,
-                  },
+                  arguments: state.result,
                 );
               }
               if (state is DetectionFailure) {
@@ -71,7 +66,7 @@ class HomePage extends StatelessWidget {
 
                   if (state.imageFile != null) ...[
                     const SizedBox(height: 16),
-                    _predictButton(imagePath: state.imageFile!.path),
+                    _PredictButton(imagePath: state.imageFile!.path),
                   ],
 
                   const SizedBox(height: 24),
@@ -160,10 +155,10 @@ class HomePage extends StatelessWidget {
   }
 }
 
-class _predictButton extends StatelessWidget {
+class _PredictButton extends StatelessWidget {
   final String imagePath;
 
-  const _predictButton({required this.imagePath});
+  const _PredictButton({required this.imagePath});
 
   @override
   Widget build(BuildContext context) {
