@@ -1,24 +1,32 @@
 import 'dart:io';
 
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_cracky_app/domain/usecases/analyze_structural_damage.dart';
+import 'package:flutter_cracky_app/domain/entities/crack_result.dart';
+import 'package:flutter_cracky_app/domain/repositories/crack_repository.dart';
 
 part "crack_event.dart";
 part "crack_state.dart";
 
-class CrackDetectionBloc extends Bloc<AnalyzeImageEvent, CrackDetectionState> {
-  final AnalyzeStructuralDamage usecase;
+class CrackDetectionBloc
+    extends Bloc<CrackDetectionEvent, CrackDetectionState> {
+  final CrackRepository repository;
 
-  CrackDetectionBloc(this.usecase) : super(LoadingState()) {
-    on<AnalyzeImageEvent>((event, emit) async {
-      emit(LoadingState());
+  CrackDetectionBloc({required this.repository}) : super(DetectionInitial()) {
+    // Menangani event saat gambar masuk
+    on<OnImageCaptured>((event, emit) async {
+      // 1. Tampilkan indikator loading di UI
+      emit(DetectionLoading());
 
       try {
-        final result = await usecase(event.image);
+        // 2. Jalankan analisis melalui repository
+        final result = await repository.detectCrack(event.imageFile);
 
-        emit(LoadedState(result.status, result.confidence));
+        // 3. Jika berhasil, kirim state sukses beserta datanya
+        emit(DetectionSuccess(result: result));
       } catch (e) {
-        emit(ErrorState());
+        // 4. Jika gagal (misal: memori penuh atau file korup)
+        emit(DetectionFailure(errorMessage: e.toString()));
       }
     });
   }
