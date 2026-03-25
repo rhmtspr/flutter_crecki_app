@@ -1,14 +1,28 @@
 part of "crack_bloc.dart";
 
-class CrackDetectionState {}
-
-class LoadingState extends CrackDetectionState {}
-
-class LoadedState extends CrackDetectionState {
-  final String result;
-  final double confidence;
-
-  LoadedState(this.result, this.confidence);
+abstract class CrackDetectionState extends Equatable {
+  @override
+  List<Object?> get props => [];
 }
 
-class ErrorState extends CrackDetectionState {}
+class DetectionInitial extends CrackDetectionState {}
+
+class DetectionLoading extends CrackDetectionState {}
+
+class DetectionSuccess extends CrackDetectionState {
+  final CrackResult result;
+
+  DetectionSuccess({required this.result});
+
+  @override
+  List<Object?> get props => [result];
+}
+
+class DetectionFailure extends CrackDetectionState {
+  final String errorMessage;
+
+  DetectionFailure({required this.errorMessage});
+
+  @override
+  List<Object?> get props => [errorMessage];
+}
