@@ -1,6 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_cracky_app/core/theme/app_theme.dart';
 import 'package:flutter_cracky_app/core/utils/router_observer.dart';
 import 'package:flutter_cracky_app/injection.dart';
 import 'package:flutter_cracky_app/presentation/bloc/camera_bloc.dart';
@@ -28,6 +29,9 @@ class MainApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: "Flutter Crecki App",
+        theme: AppTheme.lightTheme,
+        darkTheme: AppTheme.darkTheme,
+        themeMode: ThemeMode.system,
         home: HomePage(),
         navigatorObservers: [routeObserver],
         onGenerateRoute: (RouteSettings settings) {
