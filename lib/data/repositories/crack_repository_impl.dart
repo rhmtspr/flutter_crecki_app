@@ -13,7 +13,8 @@ class CrackRepositoryImpl implements CrackRepository {
   Future<CrackResult> detectCrack(File imageFile) async {
     try {
       final rawResult = await localDatasource.runInference(imageFile);
-      final String label = rawResult["label"];
+      final String label = (rawResult["label"] as String).trim();
+      print("rawResult: ${label}");
       final double confidence = rawResult["confidence"];
       return _mapToEntity(label, confidence);
     } catch (e) {
@@ -22,7 +23,7 @@ class CrackRepositoryImpl implements CrackRepository {
   }
 
   CrackResult _mapToEntity(String label, double confidence) {
-    if (label == "Multibranced Crack") {
+    if (label == "Multibranched Crack" || label == "Multibranced Crack") {
       return CrackResult(
         label: label,
         confidence: confidence,
@@ -30,21 +31,21 @@ class CrackRepositoryImpl implements CrackRepository {
         recommendation:
             "Structural damage detected. Please evacuate and consult an expert.",
       );
-    } else if (label == "Multibranced Crack") {
+    } else if (label == "Simple Crack" || label == "Simple Cracks") {
       return CrackResult(
         label: label,
         confidence: confidence,
-        status: "DANGER",
+        status: "WARNING",
         recommendation:
-            "Structural damage detected. Please evacuate and consult an expert.",
+            "Minor cracks detected. Monitor the area and consider minor repairs soon.",
       );
     } else {
       return CrackResult(
         label: label,
         confidence: confidence,
-        status: "DANGER",
+        status: "SAFE",
         recommendation:
-            "Structural damage detected. Please evacuate and consult an expert.",
+            "No significant damage detected. Regular maintenance is sufficient.",
       );
     }
   }
