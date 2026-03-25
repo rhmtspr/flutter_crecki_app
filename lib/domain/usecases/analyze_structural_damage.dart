@@ -9,6 +9,6 @@ class AnalyzeStructuralDamage {
   AnalyzeStructuralDamage(this.repository);
 
   Future<CrackResult> call(File image) {
-    return repository.analyzeImage(image);
+    return repository.detectCrack(image);
   }
 }
