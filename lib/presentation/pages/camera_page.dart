@@ -15,28 +15,29 @@ class CameraPage extends StatefulWidget {
 }
 
 class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
+  late final CameraBloc _cameraBloc;
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    context.read<CameraBloc>().add(CameraInitialize(widget.cameras));
+    _cameraBloc = context.read<CameraBloc>();
+    _cameraBloc.add(CameraInitialize(widget.cameras));
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    context.read<CameraBloc>().add(CameraStopped());
+    _cameraBloc.add(CameraStopped());
     super.dispose();
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    final bloc = context.read<CameraBloc>();
-
     if (state == AppLifecycleState.inactive) {
-      bloc.add(CameraStopped());
+      _cameraBloc.add(CameraStopped());
     } else if (state == AppLifecycleState.resumed) {
-      bloc.add(CameraResumed());
+      _cameraBloc.add(CameraResumed());
     }
   }
 
