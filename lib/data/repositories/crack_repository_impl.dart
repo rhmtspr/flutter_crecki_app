@@ -1,31 +1,51 @@
 import "dart:io";
+
+import "package:flutter_cracky_app/data/datasources/ai_local_datasource.dart";
 import "package:flutter_cracky_app/domain/entities/crack_result.dart";
 import "package:flutter_cracky_app/domain/repositories/crack_repository.dart";
-import "package:flutter_cracky_app/data/datasources/ai_local_datasource.dart";
-import "package:flutter_cracky_app/core/utils/image_processor.dart";
 
 class CrackRepositoryImpl implements CrackRepository {
-  final AiLocalDataSource dataSource;
+  final AiLocalDatasource localDatasource;
 
-  CrackRepositoryImpl(this.dataSource);
+  CrackRepositoryImpl({required this.localDatasource});
 
   @override
-  Future<CrackResult> analyzeImage(File image) async {
-    final input = ImageProcessor.process(image);
-    final output = dataSource.runModel(input);
-
-    final labels = ["Safe", "Minor Crack", "Severe Crack"];
-
-    int maxIndex = 0;
-    double maxScore = output[0];
-
-    for (int i = 1; i < output.length; i++) {
-      if (output[i] > maxScore) {
-        maxScore = output[i];
-        maxIndex = i;
-      }
+  Future<CrackResult> detectCrack(File imageFile) async {
+    try {
+      final rawResult = await localDatasource.runInference(imageFile);
+      final String label = rawResult["label"];
+      final double confidence = rawResult["confidence"];
+      return _mapToEntity(label, confidence);
+    } catch (e) {
+      throw Exception("Failed to analyze image: $e");
     }
+  }
 
-    return CrackResult(status: labels[maxIndex], confidence: maxScore);
+  CrackResult _mapToEntity(String label, double confidence) {
+    if (label == "Multibranced Crack") {
+      return CrackResult(
+        label: label,
+        confidence: confidence,
+        status: "DANGER",
+        recommendation:
+            "Structural damage detected. Please evacuate and consult an expert.",
+      );
+    } else if (label == "Multibranced Crack") {
+      return CrackResult(
+        label: label,
+        confidence: confidence,
+        status: "DANGER",
+        recommendation:
+            "Structural damage detected. Please evacuate and consult an expert.",
+      );
+    } else {
+      return CrackResult(
+        label: label,
+        confidence: confidence,
+        status: "DANGER",
+        recommendation:
+            "Structural damage detected. Please evacuate and consult an expert.",
+      );
+    }
   }
 }
