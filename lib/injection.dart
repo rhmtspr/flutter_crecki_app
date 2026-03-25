@@ -11,18 +11,18 @@ final locator = GetIt.instance;
 Future<void> initInjection() async {
   // Bloc
   locator.registerFactory(() => CameraBloc());
-  locator.registerFactory(() => CrackDetectionBloc(locator()));
+  locator.registerFactory(() => CrackDetectionBloc(repository: locator()));
 
   // Use cases
   locator.registerLazySingleton(() => AnalyzeStructuralDamage(locator()));
 
   // Repository
   locator.registerLazySingleton<CrackRepository>(
-    () => CrackRepositoryImpl(locator()),
+    () => CrackRepositoryImpl(localDatasource: locator()),
   );
 
   // Data sources
-  final aiLocalDataSource = AiLocalDataSource();
-  await aiLocalDataSource.init();
-  locator.registerLazySingleton(() => aiLocalDataSource);
+  final aiLocalDatasource = AiLocalDatasource();
+  await aiLocalDatasource.loadModel();
+  locator.registerLazySingleton(() => aiLocalDatasource);
 }
