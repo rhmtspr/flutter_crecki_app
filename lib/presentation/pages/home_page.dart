@@ -16,13 +16,13 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF7F9FC),
+      // backgroundColor: const Color(0xFFF7F9FC),
       appBar: AppBar(
         title: const Text("Crecki"),
         centerTitle: true,
-        elevation: 0,
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black87,
+        // elevation: 0,
+        // backgroundColor: Colors.white,
+        // foregroundColor: Colors.black87,
       ),
       body: MultiBlocListener(
         listeners: [
