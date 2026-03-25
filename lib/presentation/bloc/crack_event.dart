@@ -1,7 +1,15 @@
 part of "crack_bloc.dart";
 
-class AnalyzeImageEvent {
-  final File image;
+abstract class CrackDetectionEvent extends Equatable {
+  @override
+  List<Object?> get props => [];
+}
 
-  AnalyzeImageEvent(this.image);
+class OnImageCaptured extends CrackDetectionEvent {
+  final File imageFile;
+
+  OnImageCaptured(this.imageFile);
+
+  @override
+  List<Object?> get props => [imageFile];
 }
