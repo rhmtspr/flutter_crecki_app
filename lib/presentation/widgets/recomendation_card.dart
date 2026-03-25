@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_cracky_app/presentation/widgets/card_container.dart';
 
 class RecommendationCard extends StatelessWidget {
   final String recommendation;
@@ -7,8 +8,8 @@ class RecommendationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _CardContainer(
-      color: Colors.blue.shade50,
+    return CardContainer(
+      // color: Colors.blue.shade50,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -22,26 +23,6 @@ class RecommendationCard extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-class _CardContainer extends StatelessWidget {
-  final Widget child;
-  final Color? color;
-
-  const _CardContainer({required this.child, this.color});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: color ?? Colors.white,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: child,
     );
   }
 }
