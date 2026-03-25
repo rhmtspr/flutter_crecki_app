@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cracky_app/presentation/bloc/camera_bloc.dart';
+import 'package:flutter_cracky_app/presentation/bloc/crack_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_cracky_app/presentation/pages/camera_page.dart';
 
@@ -17,51 +18,88 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xFFF7F9FC),
       appBar: AppBar(
-        title: const Text("Add Story"),
+        title: const Text("Crecki"),
         centerTitle: true,
         elevation: 0,
         backgroundColor: Colors.white,
         foregroundColor: Colors.black87,
       ),
-      body: BlocConsumer<CameraBloc, CameraState>(
-        listener: (context, state) {
-          if (state.error != null) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(state.error!)));
-          }
-        },
-        builder: (context, state) {
-          return SingleChildScrollView(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildImagePreview(state),
-                const SizedBox(height: 24),
-                Row(
-                  children: [
-                    Expanded(
-                      child: _ActionButton(
-                        onPressed: () => _onGalleryView(context),
-                        icon: Icons.photo,
-                        label: "Gallery",
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: _ActionButton(
-                        onPressed: () => _onCameraView(context, state),
-                        icon: Icons.camera_alt,
-                        label: "Camera",
-                      ),
-                    ),
+      body: MultiBlocListener(
+        listeners: [
+          BlocListener<CameraBloc, CameraState>(
+            listener: (context, state) {
+              if (state.error != null) {
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(SnackBar(content: Text(state.error!)));
+              }
+            },
+          ),
+          BlocListener<CrackDetectionBloc, CrackDetectionState>(
+            listener: (context, state) {
+              if (state is DetectionSuccess) {
+                Navigator.pushNamed(
+                  context,
+                  "/result",
+                  arguments: {
+                    "label": state.result.label,
+                    "confidence": state.result.confidence,
+                    "status": state.result.status,
+                    "recommendation": state.result.recommendation,
+                  },
+                );
+              }
+              if (state is DetectionFailure) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(state.errorMessage),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              }
+            },
+          ),
+        ],
+        child: BlocBuilder<CameraBloc, CameraState>(
+          builder: (context, state) {
+            return SingleChildScrollView(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildImagePreview(state),
+
+                  if (state.imageFile != null) ...[
+                    const SizedBox(height: 16),
+                    _predictButton(imagePath: state.imageFile!.path),
                   ],
-                ),
-              ],
-            ),
-          );
-        },
+
+                  const SizedBox(height: 24),
+
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _ActionButton(
+                          onPressed: () => _onGalleryView(context),
+                          icon: Icons.photo,
+                          label: "Gallery",
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: _ActionButton(
+                          onPressed: () => _onCameraView(context, state),
+                          icon: Icons.camera_alt,
+                          label: "Camera",
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }
@@ -119,6 +157,37 @@ class HomePage extends StatelessWidget {
         context.read<CameraBloc>().add(SetCameraImage(pickedFile));
       }
     }
+  }
+}
+
+class _predictButton extends StatelessWidget {
+  final String imagePath;
+
+  const _predictButton({required this.imagePath});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CrackDetectionBloc, CrackDetectionState>(
+      builder: (context, state) {
+        if (state is DetectionLoading) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        return ElevatedButton(
+          onPressed: () {
+            context.read<CrackDetectionBloc>().add(
+              OnImageCaptured(File(imagePath)),
+            );
+          },
+          style: ElevatedButton.styleFrom(
+            padding: const EdgeInsets.symmetric(vertical: 14),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(14),
+            ),
+          ),
+          child: const Text("Predict"),
+        );
+      },
+    );
   }
 }
 
