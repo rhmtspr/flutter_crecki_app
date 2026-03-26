@@ -71,24 +71,29 @@ class HomePage extends StatelessWidget {
 
                   const SizedBox(height: 24),
 
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _ActionButton(
-                          onPressed: () => _onGalleryView(context),
-                          icon: Icons.photo,
-                          label: "Gallery",
+                  SizedBox(
+                    width: double.infinity,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Flexible(
+                          child: _ActionButton(
+                            onPressed: () => _onGalleryView(context),
+                            icon: Icons.photo,
+                            label: "Galeri",
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: _ActionButton(
-                          onPressed: () => _onCameraView(context, state),
-                          icon: Icons.camera_alt,
-                          label: "Camera",
+                        const SizedBox(height: 14),
+                        Flexible(
+                          child: _ActionButton(
+                            onPressed: () => _onCameraView(context, state),
+                            icon: Icons.camera_alt,
+                            label: "Kamera",
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -102,7 +107,7 @@ class HomePage extends StatelessWidget {
   Widget _buildImagePreview(CameraState state) {
     return Container(
       width: double.infinity,
-      height: 250,
+      height: 350,
       decoration: BoxDecoration(
         color: Colors.grey.shade200,
         borderRadius: BorderRadius.circular(14),
@@ -201,12 +206,14 @@ class _ActionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return OutlinedButton.icon(
       onPressed: onPressed,
-      icon: Icon(icon),
+      icon: Icon(icon, color: Colors.blue, size: 24),
       label: Text(label),
       style: OutlinedButton.styleFrom(
         padding: const EdgeInsets.symmetric(vertical: 14),
         side: BorderSide(color: Colors.grey.shade300),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+        textStyle: Theme.of(context).textTheme.bodyLarge,
+        foregroundColor: Colors.black87,
       ),
     );
   }
