@@ -77,8 +77,20 @@ class AiLocalDatasource {
     return convertedBytes.buffer.asUint8List();
   }
 
-  void close() {
-    _interpreter?.close();
+  // void close() {
+  //   _interpreter?.close();
+  // }
+
+  Future<Map<String, dynamic>> runYoloInference(File imageFile) async {
+    final Uint8List bytes = await imageFile.readAsBytes();
+
+    final img.Image? decodedImage = img.decodeImage(bytes);
+    if (decodedImage == null) throw Exception("Could not decode image");
+
+    final int width = decodedImage.width;
+    final int height = decodedImage.height;
+
+    return await analyzeImage(bytes, height, width);
   }
 
   Future<Map<String, dynamic>> analyzeImage(
@@ -126,5 +138,10 @@ class AiLocalDatasource {
     }
 
     return {"score": finalScore, "status": status, "count": crackCount};
+  }
+
+  void close() {
+    _interpreter?.close();
+    vision.closeYoloModel();
   }
 }
