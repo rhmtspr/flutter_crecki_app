@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cracky_app/presentation/bloc/camera_bloc.dart';
 import 'package:flutter_cracky_app/presentation/bloc/crack_bloc.dart';
+import 'package:flutter_cracky_app/presentation/widgets/card_container.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_cracky_app/presentation/pages/camera_page.dart';
 
@@ -63,11 +64,8 @@ class HomePage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _buildImagePreview(state),
-
-                  if (state.imageFile != null) ...[
-                    const SizedBox(height: 16),
-                    _PredictButton(imagePath: state.imageFile!.path),
-                  ],
+                  const SizedBox(height: 16),
+                  _PredictButton(imagePath: state.imageFile?.path),
 
                   const SizedBox(height: 24),
 
@@ -90,6 +88,17 @@ class HomePage extends StatelessWidget {
                             onPressed: () => _onCameraView(context, state),
                             icon: Icons.camera_alt,
                             label: "Kamera",
+                          ),
+                        ),
+                        const SizedBox(height: 14),
+                        CardContainer(
+                          child: Column(
+                            children: [
+                              Text("Better Scan Tip"),
+                              Text(
+                                "Ensure ample lighting and hold the phone 30cm away for high-precision crack detection",
+                              ),
+                            ],
                           ),
                         ),
                       ],
@@ -161,9 +170,9 @@ class HomePage extends StatelessWidget {
 }
 
 class _PredictButton extends StatelessWidget {
-  final String imagePath;
+  final String? imagePath;
 
-  const _PredictButton({required this.imagePath});
+  const _PredictButton({this.imagePath});
 
   @override
   Widget build(BuildContext context) {
@@ -172,19 +181,32 @@ class _PredictButton extends StatelessWidget {
         if (state is DetectionLoading) {
           return const Center(child: CircularProgressIndicator());
         }
-        return ElevatedButton(
-          onPressed: () {
-            context.read<CrackDetectionBloc>().add(
-              OnImageCaptured(File(imagePath)),
-            );
-          },
-          style: ElevatedButton.styleFrom(
-            padding: const EdgeInsets.symmetric(vertical: 14),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(14),
+        return SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
+            onPressed: imagePath == null
+                ? null
+                : () {
+                    context.read<CrackDetectionBloc>().add(
+                      OnImageCaptured(File(imagePath!)),
+                    );
+                  },
+            style: ElevatedButton.styleFrom(
+              foregroundColor: Theme.of(context).colorScheme.onPrimary,
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              elevation: 0,
+              padding: const EdgeInsets.symmetric(vertical: 14),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(14),
+              ),
+            ),
+            child: Text(
+              "Predict",
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                color: Theme.of(context).colorScheme.onPrimary,
+              ),
             ),
           ),
-          child: const Text("Predict"),
         );
       },
     );
