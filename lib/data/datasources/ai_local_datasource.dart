@@ -10,16 +10,16 @@ class AiLocalDatasource {
   Interpreter? _interpreter;
   List<String>? _labels;
 
-  // Future<void> loadModel() async {
-  //   try {
-  //     _interpreter = await Interpreter.fromAsset("assets/cracki_model.tflite");
-  //     final labelData = await rootBundle.loadString("assets/labels.txt");
-  //     _labels = labelData.split('\n');
-  //     print("Model and labels loaded successfully");
-  //   } catch (e) {
-  //     print("Error loading model: $e");
-  //   }
-  // }
+  Future<void> loadModel() async {
+    try {
+      _interpreter = await Interpreter.fromAsset("assets/cracki_model.tflite");
+      final labelData = await rootBundle.loadString("assets/labels.txt");
+      _labels = labelData.split('\n');
+      print("Model and labels loaded successfully");
+    } catch (e) {
+      print("Error loading model: $e");
+    }
+  }
 
   Future<void> loadYoloModel() async {
     vision = FlutterVision();
@@ -116,7 +116,7 @@ class AiLocalDatasource {
     for (var crack in results) {
       double boxWidth = crack["box"][2] - crack["box"][0];
       double boxHeight = crack["box"][3] - crack["box"][1];
-      double area = (boxWidth * boxHeight) / (h * 2) * 100;
+      double area = (boxWidth * boxHeight) / (h * w) * 100;
 
       totalArea += area;
       if (area > maxIndivRatio) maxIndivRatio = area;
