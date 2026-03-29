@@ -44,23 +44,8 @@ class ResultPage extends StatelessWidget {
             DetailCard(label: result.label, confidence: result.confidence),
             const SizedBox(height: 20),
             RecommendationCard(recommendation: result.recommendation),
-            const Spacer(),
-            _BackButton(),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _BackButton extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: ElevatedButton(
-        onPressed: () => Navigator.pop(context),
-        child: const Text("Back to Home"),
       ),
     );
   }
