@@ -15,11 +15,13 @@ class DetailCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Detection Details",
-            style: Theme.of(context).textTheme.titleMedium,
+            "Informasi Detail",
+            style: Theme.of(
+              context,
+            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 12),
-          InfoRow(title: "Type", value: label),
+          InfoRow(title: "Tipe", value: label),
           const SizedBox(height: 8),
           InfoRow(
             title: "Confidence",
