@@ -28,6 +28,7 @@ class MainApp extends StatelessWidget {
         BlocProvider(create: (_) => locator<CrackDetectionBloc>()),
       ],
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: "Flutter Crecki App",
         theme: AppTheme.lightTheme,
         darkTheme: AppTheme.darkTheme,
