@@ -10,17 +10,17 @@ class RecommendationCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return CardContainer(
       // color: Colors.blue.shade50,
-      child: Row(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Icon(Icons.info_outline, color: Colors.blue),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Text(
-              recommendation,
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
+          Text(
+            "Rekomendasi Tindakan",
+            style: Theme.of(
+              context,
+            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
           ),
+          const SizedBox(height: 12),
+          Text(recommendation, style: Theme.of(context).textTheme.bodyMedium),
         ],
       ),
     );
