@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cracky_app/presentation/bloc/camera_bloc.dart';
 import 'package:flutter_cracky_app/presentation/bloc/crack_bloc.dart';
+// import 'package:flutter_cracky_app/presentation/pages/live_crack_detector.dart';
 import 'package:flutter_cracky_app/presentation/widgets/card_container.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_cracky_app/presentation/pages/camera_page.dart';
@@ -63,40 +64,50 @@ class HomePage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildImagePreview(state),
+                  _buildImagePreview(context, state),
                   const SizedBox(height: 16),
                   _PredictButton(imagePath: state.imageFile?.path),
 
-                  const SizedBox(height: 24),
-
+                  // const SizedBox(height: 14),
                   SizedBox(
                     width: double.infinity,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Flexible(
-                          child: _ActionButton(
-                            onPressed: () => _onGalleryView(context),
-                            icon: Icons.photo,
-                            label: "Galeri",
-                          ),
+                        const SizedBox(height: 14),
+                        _ActionButton(
+                          onPressed: () => _onGalleryView(context),
+                          icon: Icons.photo,
+                          label: "Galeri",
                         ),
                         const SizedBox(height: 14),
-                        Flexible(
-                          child: _ActionButton(
-                            onPressed: () => _onCameraView(context, state),
-                            icon: Icons.camera_alt,
-                            label: "Kamera",
-                          ),
+                        _ActionButton(
+                          onPressed: () => _onCameraView(context, state),
+                          icon: Icons.camera_alt,
+                          label: "Kamera",
                         ),
                         const SizedBox(height: 14),
-                        CardContainer(
+                        Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.surfaceContainer,
+                            borderRadius: BorderRadius.circular(14),
+                          ),
                           child: Column(
                             children: [
-                              Text("Better Scan Tip"),
                               Text(
-                                "Ensure ample lighting and hold the phone 30cm away for high-precision crack detection",
+                                "Tips pemindaian yang lebih baik",
+                                style: Theme.of(context).textTheme.titleSmall
+                                    ?.copyWith(fontWeight: FontWeight.bold),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                "Pastikan pencahayaan yang cukup dan pegang ponsel pada jarak 30 cm untuk mendeteksi retakan dengan akurat",
+                                style: Theme.of(context).textTheme.bodyMedium,
+                                textAlign: TextAlign.center,
                               ),
                             ],
                           ),
@@ -113,12 +124,12 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildImagePreview(CameraState state) {
+  Widget _buildImagePreview(BuildContext context, CameraState state) {
     return Container(
       width: double.infinity,
       height: 350,
       decoration: BoxDecoration(
-        color: Colors.grey.shade200,
+        color: Theme.of(context).colorScheme.surfaceContainerHighest,
         borderRadius: BorderRadius.circular(14),
       ),
       child: state.imageFile != null
@@ -201,7 +212,7 @@ class _PredictButton extends StatelessWidget {
               ),
             ),
             child: Text(
-              "Predict",
+              "Prediksi",
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                 color: Theme.of(context).colorScheme.onPrimary,
               ),
@@ -228,14 +239,18 @@ class _ActionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return OutlinedButton.icon(
       onPressed: onPressed,
-      icon: Icon(icon, color: Colors.blue, size: 24),
+      icon: Icon(
+        icon,
+        color: Theme.of(context).colorScheme.secondary,
+        size: 24,
+      ),
       label: Text(label),
       style: OutlinedButton.styleFrom(
         padding: const EdgeInsets.symmetric(vertical: 14),
-        side: BorderSide(color: Colors.grey.shade300),
+        side: BorderSide(color: Theme.of(context).dividerColor),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
         textStyle: Theme.of(context).textTheme.bodyLarge,
-        foregroundColor: Colors.black87,
+        foregroundColor: Theme.of(context).colorScheme.onSurface,
       ),
     );
   }
