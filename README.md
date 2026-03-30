@@ -105,8 +105,8 @@ Ikuti langkah-langkah berikut untuk menjalankan proyek secara lokal:
 
 2. **Klon repositori:**
    ```bash
-   git clone [https://github.com/usernameanda/crecki-disaster-app.git](https://github.com/usernameanda/crecki-disaster-app.git)
-   cd crecki-disaster-app
+   git clone [https://github.com/rhmtspr/flutter_crecki_app.git](https://github.com/rhmtspr/flutter_crecki_app.git)
+   cd flutter_crecki_app
 
 3. **Instal dependensi:**
     ```bash
