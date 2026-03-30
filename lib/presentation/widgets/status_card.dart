@@ -54,28 +54,6 @@ class StatusCard extends StatelessWidget {
         ),
       ),
     );
-
-    // return Container(
-    //   width: double.infinity,
-    //   padding: const EdgeInsets.all(20),
-    //   decoration: BoxDecoration(
-    //     color: color.withValues(alpha: 0.1),
-    //     borderRadius: BorderRadius.circular(16),
-    //   ),
-    //   child: Column(
-    //     children: [
-    //       Icon(_getStatusIcon(status), size: 50, color: color),
-    //       const SizedBox(height: 10),
-    //       Text(
-    //         status,
-    //         style: Theme.of(context).textTheme.titleLarge?.copyWith(
-    //           fontWeight: FontWeight.bold,
-    //           color: color,
-    //         ),
-    //       ),
-    //     ],
-    //   ),
-    // );
   }
 }
 
