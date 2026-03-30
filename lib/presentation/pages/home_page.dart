@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cracky_app/presentation/bloc/camera_bloc.dart';
 import 'package:flutter_cracky_app/presentation/bloc/crack_bloc.dart';
-// import 'package:flutter_cracky_app/presentation/pages/live_crack_detector.dart';
-import 'package:flutter_cracky_app/presentation/widgets/card_container.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_cracky_app/presentation/pages/camera_page.dart';
 
@@ -43,7 +41,14 @@ class HomePage extends StatelessWidget {
                 Navigator.pushNamed(
                   context,
                   "/result",
-                  arguments: state.result,
+                  arguments: {
+                    "result": state.result,
+                    "imagePath": context
+                        .read<CameraBloc>()
+                        .state
+                        .imageFile
+                        ?.path,
+                  },
                 );
               }
               if (state is DetectionFailure) {
