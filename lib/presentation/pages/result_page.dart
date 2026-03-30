@@ -11,12 +11,10 @@ class ResultPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final result = ModalRoute.of(context)?.settings.arguments;
-
-    if (result is CrackResult) {
-      print("ResultPage label: ${result.label}");
-      print("ResultPage status: ${result.status}");
-    }
+    final args =
+        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    final result = args?["result"] as CrackResult?;
+    final imagePath = args?["imagePath"] as String;
 
     if (result is! CrackResult) {
       return const Scaffold(
@@ -24,22 +22,13 @@ class ResultPage extends StatelessWidget {
       );
     }
 
-    // final theme = Theme.of(context);
-
     return Scaffold(
-      // backgroundColor: const Color(0xFFF7F9FC),
-      appBar: AppBar(
-        title: const Text("Analysis Result"),
-        centerTitle: true,
-        // elevation: 0,
-        // backgroundColor: Colors.white,
-        // foregroundColor: Colors.black87,
-      ),
+      appBar: AppBar(title: const Text("Hasil Prediksi"), centerTitle: true),
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            StatusCard(status: result.status),
+            StatusCard(status: result.status, imagePath: imagePath),
             const SizedBox(height: 20),
             DetailCard(label: result.label, confidence: result.confidence),
             const SizedBox(height: 20),
