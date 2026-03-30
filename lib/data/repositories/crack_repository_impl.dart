@@ -14,7 +14,6 @@ class CrackRepositoryImpl implements CrackRepository {
     try {
       final rawResult = await localDatasource.runInference(imageFile);
       final String label = (rawResult["label"] as String).trim();
-      print("rawResult: ${label}");
       final double confidence = rawResult["confidence"];
       return _mapToEntity(label, confidence);
     } catch (e) {
@@ -27,25 +26,25 @@ class CrackRepositoryImpl implements CrackRepository {
       return CrackResult(
         label: label,
         confidence: confidence,
-        status: "DANGER",
+        status: "BAHAYA",
         recommendation:
-            "Structural damage detected. Please evacuate and consult an expert.",
+            "Terdeteksi kerusakan struktural. Silahkan mengevakuasi diri dan konsultasikan dengan ahli.",
       );
     } else if (label == "Simple Crack" || label == "Simple Cracks") {
       return CrackResult(
         label: label,
         confidence: confidence,
-        status: "WARNING",
+        status: "PERINGATAN",
         recommendation:
-            "Minor cracks detected. Monitor the area and consider minor repairs soon.",
+            "Terdeteksi retakan kecil. Pantau area tersebut dan pertimbangkan untuk segera melakukan perbaikan kecil.",
       );
     } else {
       return CrackResult(
         label: label,
         confidence: confidence,
-        status: "SAFE",
+        status: "AMAN",
         recommendation:
-            "No significant damage detected. Regular maintenance is sufficient.",
+            "Tidak terdektesi adanya kerusakan yang signifikan. Cukup lakukan perawatan rutin.",
       );
     }
   }
