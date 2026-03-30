@@ -35,11 +35,11 @@ class StatusCard extends StatelessWidget {
 
 Color _getStatusColor(String status) {
   switch (status.toLowerCase()) {
-    case "safe":
+    case "aman":
       return Colors.green;
-    case "warning":
+    case "peringatan":
       return Colors.orange;
-    case "danger":
+    case "bahaya":
       return Colors.red;
     default:
       return Colors.grey;
@@ -48,11 +48,11 @@ Color _getStatusColor(String status) {
 
 IconData _getStatusIcon(String status) {
   switch (status.toLowerCase()) {
-    case "safe":
+    case "aman":
       return Icons.check_circle;
-    case "warning":
+    case "peringatan":
       return Icons.warning_amber_rounded;
-    case "danger":
+    case "bahaya":
       return Icons.error;
     default:
       return Icons.help;
